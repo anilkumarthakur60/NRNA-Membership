@@ -40,4 +40,11 @@ class DashboardController extends Controller
             ]);
         });
     }
+
+    public function donor()
+    {
+        return Inertia::render('Users/DonorDashboard', [
+            'user' => auth()->user()
+        ]);
+    }
 }

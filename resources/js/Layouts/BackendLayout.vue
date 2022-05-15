@@ -11,7 +11,9 @@
       id="sidebar"
     >
       <ul class="nav flex-column text-white w-100">
-        <a href="#" class="nav-link h3 text-white my-2"> Dashboard </a>
+        <a href="#" class="nav-link h3 text-white my-2">
+          {{ $page.props.user.name }}
+        </a>
         <li class="nav-link">
           <Link :href="route('dashboard')">
             <i class="bx bx-conversation"></i>
@@ -30,6 +32,12 @@
             <span class="mx-2">Users</span>
           </Link>
         </li>
+        <li class="nav-link">
+          <Link :href="route('logout')" method="post">
+            <i class="bx bx-user-check"></i>
+            <span class="mx-2">Logout</span>
+          </Link>
+        </li>
       </ul>
     </div>
 
@@ -44,46 +52,6 @@
       <div class="container">
         <slot></slot>
       </div>
-    </div>
-  </div>
-  <div class="" v-else>
-    <div
-      class="
-        side-navbar
-        active-nav
-        d-flex
-        justify-content-between
-        flex-wrap flex-column
-      "
-      id="sidebar"
-    >
-      <ul class="nav flex-column text-white w-100">
-        <a href="#" class="nav-link h3 text-white my-2"> Dashboard </a>
-        <li class="nav-link">
-          <Link :href="route('dashboard')">
-            <i class="bx bx-conversation"></i>
-            <span class="mx-2">Dashboard</span>
-          </Link>
-        </li>
-        <li class="nav-link">
-          <Link :href="route('profile.show')">
-            <i class="bx bx-user-check"></i>
-            <span class="mx-2">Profile</span>
-          </Link>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Main Wrapper -->
-    <div class="p-1 my-container active-cont">
-      <!-- Top Nav -->
-      <nav class="navbar top-navbar navbar-light bg-light px-5">
-        <button class="btn border-0" id="menu-btn">
-          <i class="bx bx-menu"></i>
-        </button>
-      </nav>
-
-      <slot></slot>
     </div>
   </div>
 </template>

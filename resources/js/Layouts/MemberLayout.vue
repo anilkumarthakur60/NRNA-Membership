@@ -10,7 +10,9 @@
     id="sidebar"
   >
     <ul class="nav flex-column text-white w-100">
-      <a href="#" class="nav-link h3 text-white my-2"> Dashboard </a>
+      <a href="#" class="nav-link h3 text-white my-2">
+        {{ $page.props.user.name }}
+      </a>
       <li class="nav-link">
         <Link :href="route('dashboard')">
           <i class="bx bx-conversation"></i>
@@ -21,6 +23,12 @@
         <Link :href="route('profile.show')">
           <i class="bx bx-user-check"></i>
           <span class="mx-2">Profile</span>
+        </Link>
+      </li>
+      <li class="nav-link">
+        <Link :href="route('logout')" method="post">
+          <i class="bx bx-user-check"></i>
+          <span class="mx-2">Logout</span>
         </Link>
       </li>
     </ul>

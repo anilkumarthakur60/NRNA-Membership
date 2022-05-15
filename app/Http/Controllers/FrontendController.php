@@ -166,13 +166,13 @@ class FrontendController extends Controller
 
     public function GenerateLink()
     {
-        if (auth()->user()->children->count()) {
+        if (auth()->user()->children()->exists()) {
             return "your cannot add more member";
         } else {
             $user = auth()->user();
             $user->referal_code = Str::uuid();
             $user->save();
-            return route('joinInvitationByLink', $user->referal_code);
+            return back();
         }
     }
 

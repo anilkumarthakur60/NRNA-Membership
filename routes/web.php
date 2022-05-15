@@ -27,9 +27,20 @@ route::get('membership-list', [FrontendController::class, 'membershipList'])->na
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
+    'verified', 'admin',
+])->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('users/change-user-status/{user}', [UserController::class, 'changeUserStatus'])->name('users.changeUserStatus');
+    Route::resource('users', UserController::class);
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    route::get('generate-link', [FrontendController::class, 'GenerateLink'])->name('generateLink');
+    Route::get('donor/dashboard', [DashboardController::class, 'donor'])->name('donor.dashboard');
     Route::get('users/change-user-status/{user}', [UserController::class, 'changeUserStatus'])->name('users.changeUserStatus');
     Route::resource('users', UserController::class);
 });

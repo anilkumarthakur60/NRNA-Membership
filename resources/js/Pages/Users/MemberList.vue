@@ -74,7 +74,6 @@ export default {
   props: {
     users: Object,
   },
-
   mixins: [InteractsWithQueryBuilder],
   components: {
     Table: Tailwind2.Table,

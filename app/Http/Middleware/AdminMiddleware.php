@@ -17,8 +17,9 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (!auth()->user()->userType) {
-            return redirect(route('frontend.index'));
+            return redirect(route('donor.dashboard'));
+        } else {
+            return redirect(route('dashboard'));
         }
-        return $next($request);
     }
 }
