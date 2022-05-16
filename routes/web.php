@@ -24,6 +24,11 @@ Route::get('membership-list', [FrontendController::class, 'memberlists'])->name(
 route::get('processSuccess', [FrontendController::class, 'processSuccess'])->name('processSuccess');
 route::get('processCancel', [FrontendController::class, 'processCancel'])->name('processCancel');
 route::get('membership-list', [FrontendController::class, 'membershipList'])->name('membershipList');
+
+route::get('join-link/invitation-link={user:referal_code}', [FrontendController::class, 'joinInvitaionLink'])->name('joinInvitaionLink');
+route::post('join-by-link/{user:referal_code}', [FrontendController::class, 'joinInvitaionLinkPost'])->name('joinInvitaionLinkPost');
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

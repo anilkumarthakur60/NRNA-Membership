@@ -159,9 +159,16 @@ class FrontendController extends Controller
     }
 
 
-    public function joinInvitationByLink(Request $request, User $user)
+    public function joinInvitaionLink(Request $request, User $user)
     {
-        dd($user);
+        return Inertia::render('Users/JoinInvitation', [
+            'user' => $user
+        ]);
+    }
+
+    public function joinInvitaionLinkPost(Request $request)
+    {
+        dd($request->all());
     }
 
     public function GenerateLink()
