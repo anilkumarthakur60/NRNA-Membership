@@ -77,8 +77,8 @@ class User extends Authenticatable
         return $this->hasOne(User::class, 'parent_id');
     }
 
-    public function userTypes()
+    public function UserTypes()
     {
-        return $this->belongsToMany(UserType::class)->orderBy('name', 'asc');
+        return $this->belongsToMany(UserType::class);
     }
 }

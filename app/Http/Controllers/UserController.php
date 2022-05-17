@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserType;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
@@ -19,6 +20,8 @@ class UserController extends Controller
      */
     public function index()
     {
+
+
         $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
             $query->where(function ($query) use ($value) {
                 $query->where('name', 'LIKE', "%{$value}%")->orWhere('email', 'LIKE', "%{$value}%");
@@ -86,6 +89,14 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+
+        $usertypes = $user->UserTypes()->pluck('name');
+
+
+        return Inertia::render('Users/Edit', [
+            'user' => $user,
+            'usertypes' => $usertypes
+        ]);
         //
     }
 
@@ -98,6 +109,18 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->validate($request, [
+            'usertypes' => 'required|array',
+            'usertypes.*' => 'exists:user_types,name'
+        ]);
+
+        $arrayData = [];
+        foreach ($request->usertypes as $usertype) {
+            $arrayData[] = UserType::where('name', $usertype)->first()->id;
+        }
+        $user->UserTypes()->sync($arrayData);
+        return redirect(route('users.index'));
+
         //
     }
 

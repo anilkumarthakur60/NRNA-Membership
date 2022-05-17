@@ -1,8 +1,4 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
-
-input.block.w-full.sm\:text-sm.rounded-md.shadow-sm.focus\:ring-indigo-500.focus\:border-indigo-500.border-gray-300 {
-    line-height: 33px;
-}
+@import '@vueform/multiselect/themes/default.css';

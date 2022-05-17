@@ -1,17 +1,13 @@
 <template>
-  <button
-    :disabled="loading"
-    class="btn-outline-danger btn-sm btn m-auto mt-3"
-    :class="Classes"
-    type="submit"
-  >
+  <button :disabled="loading" class="" :class="Classes" type="submit">
     <div
       v-if="loading"
-      class="spinner-border text-white spinner-border-sm"
+      class="spinner-border text-white spinner-border-sm me-3"
       role="status"
     >
-      <span class="visually-hidden">Loading...</span>
+      <span class="visually-hidden text-success"> Loading...</span>
     </div>
+
     <slot />
   </button>
 </template>

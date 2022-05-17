@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12 d-flex">
         <Link
-          :href="route('userTypes.index')"
+          :href="route('users.index')"
           class="btn btn-sm btn-info my-2 px-3 ms-auto"
         >
           View All List
@@ -15,18 +15,14 @@
             <form @submit.prevent="store">
               <div class="row">
                 <div class="col-sm-12">
-                  <div class="mb-3">
-                    <label for="" class="form-label"></label>
-                    <input
-                      type="text"
-                      v-model="form.name"
-                      class="form-control"
-                      placeholder="User Type Name "
-                    />
-                    <span class="text-danger" v-if="errors.name">{{
-                      errors.name
-                    }}</span>
-                  </div>
+                  <Multiselect
+                    mode="tags"
+                    v-model="form.usertypes"
+                    :closeOnSelect="false"
+                    :searchable="true"
+                    :createTag="false"
+                    :options="usertypes"
+                  ></Multiselect>
                 </div>
                 <div class="col-sm-12 d-flex">
                   <loading-button
@@ -49,27 +45,31 @@ import BackendLayout from "../../Layouts/BackendLayout.vue";
 
 import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
 import LoadingButton from "../../Components/LoadingButton.vue";
+import Multiselect from "@vueform/multiselect";
 
 export default {
   components: {
     BackendLayout,
     Link,
     LoadingButton,
+    Multiselect,
   },
 
   props: {
     errors: Object,
+    usertypes: Array,
+    user: Object,
   },
 
-  setup() {
+  setup(props) {
     const form = useForm({
-      name: null,
+      usertypes: props.usertypes,
     });
     return { form };
   },
   methods: {
     store() {
-      this.form.post(route("userTypes.store"), {
+      this.form.put(route("users.update", this.user.id), {
         preserveScroll: true,
         onSuccess: () => {
           this.$swal({

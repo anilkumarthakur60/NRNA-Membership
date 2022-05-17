@@ -13,6 +13,8 @@
           <th v-show="showColumn('email')" @click.prevent="sortBy('email')">
             Email
           </th>
+          <th>Action</th>
+          <th>Edit</th>
         </tr>
       </template>
 
@@ -32,6 +34,13 @@
             />
             {{ hodor }}
           </td>
+          <td>
+            <Link
+              :href="route('users.edit', user.id)"
+              class="btn btn-sm btn-info text-white"
+              >Edit</Link
+            >
+          </td>
         </tr>
       </template>
     </Table>
@@ -46,6 +55,8 @@ import {
 import BackendLayout from "../../Layouts/BackendLayout.vue";
 
 import ToggleButton from "../../Components/ToggleButton.vue";
+
+import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
 export default {
   mixins: [InteractsWithQueryBuilder],
 
@@ -53,6 +64,7 @@ export default {
     Table: Tailwind2.Table,
     BackendLayout,
     ToggleButton,
+    Link,
   },
 
   props: {

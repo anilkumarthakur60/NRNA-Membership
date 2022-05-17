@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
-        UserType::factory(50)->hasUsers(50)->create();
+        // UserType::factory(50)->hasUsers(50)->create();
+        User::factory(50)->hasUserTypes(50)->create();
     }
 }

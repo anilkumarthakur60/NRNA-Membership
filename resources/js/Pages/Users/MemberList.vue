@@ -1,5 +1,8 @@
 <template>
   <div class="row">
+    <div class="col-12 d-flex">
+      <Link :href="route('front.index')" class="btn btn-info">Home</Link>
+    </div>
     <div class="col-md-12">
       <div class="row">
         <div class="col-md-4" v-for="user in users.data" :key="user.id">
@@ -69,6 +72,8 @@ import {
   InteractsWithQueryBuilder,
   Tailwind2,
 } from "@protonemedia/inertiajs-tables-laravel-query-builder";
+
+import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
 export default {
   name: "MemberList",
   props: {
@@ -77,6 +82,7 @@ export default {
   mixins: [InteractsWithQueryBuilder],
   components: {
     Table: Tailwind2.Table,
+    Link,
   },
 };
 </script>

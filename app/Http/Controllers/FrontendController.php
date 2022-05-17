@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Membertype;
 use App\Models\Paymenttype;
 use App\Models\User;
+use App\Models\UserType;
 use Illuminate\Http\Request;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Illuminate\Support\Str;
@@ -213,9 +214,11 @@ class FrontendController extends Controller
             ->paginate()
             ->withQueryString();
 
+        $usertypes = UserType::withCount('users')->get();
 
         return Inertia::render('Users/MemberList', [
             'users' => $users,
+            'usertypes' => $usertypes
         ])->table(function (InertiaTable $table) {
             $table->addSearchRows([
                 'name' => 'Name',

@@ -56,6 +56,8 @@ class UserTypeController extends Controller
      */
     public function create()
     {
+
+        return Inertia::render('UserType/UserTypeCreate');
         //
     }
 
@@ -67,6 +69,13 @@ class UserTypeController extends Controller
      */
     public function store(StoreUserTypeRequest $request)
     {
+
+
+        UserType::create($request->validated());
+
+        return redirect(route('userTypes.index'));
+
+
         //
     }
 
@@ -89,6 +98,10 @@ class UserTypeController extends Controller
      */
     public function edit(UserType $userType)
     {
+
+        return Inertia::render('UserType/UserTypeEdit', [
+            'userType' => $userType
+        ]);
         //
     }
 
@@ -101,6 +114,8 @@ class UserTypeController extends Controller
      */
     public function update(UpdateUserTypeRequest $request, UserType $userType)
     {
+        $userType->update($request->validated());
+        return redirect(route('userTypes.index'));
         //
     }
 
@@ -112,6 +127,8 @@ class UserTypeController extends Controller
      */
     public function destroy(UserType $userType)
     {
+        $userType->delete();
+        return redirect(route('userTypes.index'));
         //
     }
 }
