@@ -2,7 +2,12 @@
 
 <template>
   <Head title="Welcome" />
-  <div class="container mt-5">
+  <div class="container mt-2">
+    <Link
+      :href="route('login')"
+      class="btn btn-sm btn-success my-2 px-4 fw-bold text-white"
+      >Login</Link
+    >
     <form @submit.prevent="store" method="post">
       <div
         class="btn-group w-50"
@@ -277,12 +282,11 @@
             }}</span>
           </div>
           <div class="col-12 d-flex my-2">
-            <button
-              type="submit"
-              class="btn btn-success btn-sm px-4 text-white mx-auto"
+            <loading-button
+              :Classes="'btn btn-success btn-sm px-4 text-white mx-auto'"
+              :loading="form.processing"
+              >Submit</loading-button
             >
-              Submit
-            </button>
           </div>
         </div>
       </div>
@@ -290,7 +294,8 @@
   </div>
 </template>
 <script>
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
+import LoadingButton from "../Components/LoadingButton.vue";
 
 export default {
   name: "Welcome",
@@ -300,6 +305,11 @@ export default {
     errors: Object,
     paymentypes: Array,
     membertypes: Array,
+  },
+  components: {
+    Link,
+    Head,
+    LoadingButton,
   },
   data() {
     return {

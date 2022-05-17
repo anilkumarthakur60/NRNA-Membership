@@ -51,9 +51,11 @@ class FrontendController extends Controller
             'status' => 'required|in:citizenship,permanent_resident,other',
             'membertype_id' => 'required|exists:membertypes,id',
             'phone' => 'required',
-            'donation_amount' => 'gt:0',
+            'donation_amount' => 'numeric|nullable',
 
         ]);
+
+
 
 
 
@@ -61,7 +63,7 @@ class FrontendController extends Controller
         $amount = 0;
         if ($request->paymenttype_id) {
             $this->validate($request, [
-                'paymenttype_id' => 'required|exists:paymenttypes,id',
+                'paymenttype_id' => 'nullable|exists:paymenttypes,id',
             ]);
             $paymentypes = Paymenttype::find($request->paymenttype_id);
             $amount = $amount + $paymentypes->price;
@@ -104,7 +106,7 @@ class FrontendController extends Controller
                 0 => [
                     "amount" => [
                         "currency_code" => "USD",
-                        "value" => 1
+                        "value" => $amount
                     ]
                 ]
             ]

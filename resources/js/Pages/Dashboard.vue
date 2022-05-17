@@ -25,7 +25,7 @@
             <ToggleButton
               id="changed-font"
               @change="onChangeEventHandler(user.id)"
-              :width="80"
+              :width="60"
               :height="30"
               :speed="480"
               :value="user.userType"

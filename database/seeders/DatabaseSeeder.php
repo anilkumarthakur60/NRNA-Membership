@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\UserType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(50)->create();
+        // User::factory(50)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
@@ -23,9 +24,11 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            PaymenttypeSeeder::class,
-            MembertypeSeeder::class
+            // PaymenttypeSeeder::class,
+            // MembertypeSeeder::class
 
         ]);
+
+        UserType::factory(50)->hasUsers(50)->create();
     }
 }

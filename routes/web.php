@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserTypeController;
 use App\Http\Middleware\CorMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,7 @@ Route::middleware([
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('users/change-user-status/{user}', [UserController::class, 'changeUserStatus'])->name('users.changeUserStatus');
     Route::resource('users', UserController::class);
+    Route::resource('userTypes', UserTypeController::class);
 });
 
 Route::middleware([

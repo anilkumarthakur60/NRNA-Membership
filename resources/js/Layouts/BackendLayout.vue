@@ -33,6 +33,12 @@
           </Link>
         </li>
         <li class="nav-link">
+          <Link :href="route('userTypes.index')">
+            <i class="bx bx-user-check"></i>
+            <span class="mx-2">UserTypes</span>
+          </Link>
+        </li>
+        <li class="nav-link">
           <Link :href="route('logout')" method="post">
             <i class="bx bx-user-check"></i>
             <span class="mx-2">Logout</span>

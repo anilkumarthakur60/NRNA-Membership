@@ -20,6 +20,18 @@
         <tr v-for="user in users.data" :key="user.id">
           <td>{{ user.name }}</td>
           <td v-show="showColumn('email')">{{ user.email }}</td>
+          <td>
+            <ToggleButton
+              id="changed-font"
+              @change="onChangeEventHandler(user.id)"
+              :width="60"
+              :height="30"
+              :speed="480"
+              :value="user.id"
+              :labels="{ checked: 'Active', unchecked: 'Inactive' }"
+            />
+            {{ hodor }}
+          </td>
         </tr>
       </template>
     </Table>
@@ -33,16 +45,27 @@ import {
 } from "@protonemedia/inertiajs-tables-laravel-query-builder";
 import BackendLayout from "../../Layouts/BackendLayout.vue";
 
+import ToggleButton from "../../Components/ToggleButton.vue";
 export default {
   mixins: [InteractsWithQueryBuilder],
 
   components: {
     Table: Tailwind2.Table,
     BackendLayout,
+    ToggleButton,
   },
 
   props: {
     users: Object,
+  },
+  methods: {
+    onChangeEventHandler(id) {
+      console.log(id);
+      axios.get(route("users.changeUserStatus", id)).then((response) => {
+        this.info = response;
+        this.$swal("Success!", response.data.success, "success");
+      });
+    },
   },
 };
 </script>

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\UserType;
+use App\Http\Requests\StoreUserTypeRequest;
+use App\Http\Requests\UpdateUserTypeRequest;
 use Inertia\Inertia;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-
-class UserController extends Controller
+class UserTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,28 +21,31 @@ class UserController extends Controller
     {
         $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
             $query->where(function ($query) use ($value) {
-                $query->where('name', 'LIKE', "%{$value}%")->orWhere('email', 'LIKE', "%{$value}%");
+                $query->where('name', 'LIKE', "%{$value}%")->orWhere('id', 'LIKE', "%{$value}%");
             });
         });
 
-        $users = QueryBuilder::for(User::class)
+        $users = QueryBuilder::for(UserType::class)->withCount('users')
             ->defaultSort('name')
-            ->allowedSorts(['name', 'email'])
-            ->allowedFilters(['name', 'email', $globalSearch])
+            ->allowedSorts(['name', 'id'])
+            ->allowedFilters(['name', 'id', $globalSearch])
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('Users/Index', [
+        return Inertia::render('UserType/UserTypeIndex', [
             'users' => $users,
         ])->table(function (InertiaTable $table) {
             $table->addSearchRows([
+                'id' => 'Id',
                 'name' => 'Name',
-                'email' => 'Email address',
+                'users_count' => 'User Count',
             ])->addColumns([
-                'email' => 'Email address',
+                'id' => 'Name',
                 'name' => 'Name',
+                'users_count' => 'User Count',
             ]);
         });
+
         //
     }
 
@@ -59,10 +62,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreUserTypeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserTypeRequest $request)
     {
         //
     }
@@ -70,10 +73,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\UserType  $userType
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(UserType $userType)
     {
         //
     }
@@ -81,10 +84,10 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\UserType  $userType
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(UserType $userType)
     {
         //
     }
@@ -92,11 +95,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param  \App\Http\Requests\UpdateUserTypeRequest  $request
+     * @param  \App\Models\UserType  $userType
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserTypeRequest $request, UserType $userType)
     {
         //
     }
@@ -104,23 +107,11 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\UserType  $userType
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(UserType $userType)
     {
         //
-    }
-
-    public function changeUserStatus(User $user)
-    {
-        $user->userType = !$user->userType;
-        $user->save();
-        if ($user->userType) {
-            $status = 'Active';
-        } else {
-            $status = "Inactive";
-        }
-        return response()->json(['success' => 'User type updated to ' . $status]);
     }
 }
