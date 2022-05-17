@@ -23,6 +23,10 @@
         <label class="btn btn-outline-primary" :for="membertype.slug">{{
           membertype.name + " amount:" + membertype.price
         }}</label>
+
+        <span class="text-danger" v-if="errors.membertype_id">{{
+          errors.membertype_id
+        }}</span>
       </div>
       <div class="row">
         <div class="mt-3 row">
@@ -34,6 +38,9 @@
               required
               class="form-control"
             />
+            <span class="text-danger" v-if="errors.name">{{
+              errors.name
+            }}</span>
           </div>
           <div class="col-md-6 my-2">
             <span>Email</span>
@@ -43,6 +50,9 @@
               required
               class="form-control"
             />
+            <span class="text-danger" v-if="errors.email">{{
+              errors.email
+            }}</span>
           </div>
           <div class="col-md-6 my-2">
             <span>Phone Number</span>
@@ -52,6 +62,9 @@
               required
               class="form-control"
             />
+            <span class="text-danger" v-if="errors.phone">{{
+              errors.phone
+            }}</span>
           </div>
           <div class="col-md-6 my-2">
             <span>Street Address</span>
@@ -61,6 +74,9 @@
               required
               class="form-control"
             />
+            <span class="text-danger" v-if="errors.street_address">{{
+              errors.street_address
+            }}</span>
           </div>
           <div class="col-md-6 my-2">
             <span>Apartment, Suite, etc</span>
@@ -70,6 +86,9 @@
               required
               class="form-control"
             />
+            <span class="text-danger" v-if="errors.apartment">{{
+              errors.apartment
+            }}</span>
           </div>
           <div class="col-md-6 my-2">
             <span>City</span>
@@ -79,6 +98,9 @@
               required
               class="form-control"
             />
+            <span class="text-danger" v-if="errors.city">{{
+              errors.city
+            }}</span>
           </div>
           <div class="col-md-6 my-2">
             <span>Provinance</span>
@@ -88,6 +110,9 @@
               required
               class="form-control"
             />
+            <span class="text-danger" v-if="errors.provience">{{
+              errors.provience
+            }}</span>
           </div>
           <div class="col-md-6 my-2">
             <span>Zip/Postal Code</span>
@@ -97,6 +122,9 @@
               required
               class="form-control"
             />
+            <span class="text-danger" v-if="errors.zip_code">{{
+              errors.zip_code
+            }}</span>
           </div>
           <div class="col-md-6 my-2">
             <span>Country</span>
@@ -106,6 +134,9 @@
               required
               class="form-control"
             />
+            <span class="text-danger" v-if="errors.country">{{
+              errors.country
+            }}</span>
           </div>
           <div class="col-md-6 my-2">
             <h6>Status</h6>
@@ -155,6 +186,9 @@
                 >Other</label
               >
             </div>
+            <span class="text-danger" v-if="errors.status">{{
+              errors.status
+            }}</span>
           </div>
           <div class="col-md-6 my-2">
             <div class="mb-3 row">
@@ -171,15 +205,14 @@
                   id="staticEmail"
                   @input="form.image = $event.target.files[0]"
                 />
+                <span class="text-danger" v-if="errors.image">{{
+                  errors.image
+                }}</span>
                 <img v-if="url" :src="url" class="w-25 my-2" />
               </div>
             </div>
-
-            <span v-if="form.errors.name" class="text-danger">{{
-              form.errors.name
-            }}</span>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" v-if="coubleDivShow">
             <div
               class="btn-group w-50"
               v-for="(payments, index) in paymentypes"
@@ -189,7 +222,6 @@
                 type="radio"
                 class="btn-check"
                 name="options-radios"
-                required
                 :value="payments.id"
                 @input="onChangePaymentType(payments)"
                 :id="payments.slug"
@@ -200,6 +232,9 @@
                 payments.name + " amount" + payments.price
               }}</label>
             </div>
+            <span class="text-danger" v-if="errors.paymenttype_id">{{
+              errors.paymenttype_id
+            }}</span>
           </div>
 
           <div class="col-md-4" v-if="memberShipTypesName">
@@ -211,6 +246,9 @@
               id="first"
               v-model="form.membership_amount"
             />
+            <span class="text-danger" v-if="errors.membership_amount">{{
+              errors.membership_amount
+            }}</span>
           </div>
           <div class="col-md-4" v-if="memberShipTypesName">
             <span>Make Donation"(Optional)</span>
@@ -221,6 +259,9 @@
               @change="domationAmountChange()"
               v-model="form.donation_amount"
             />
+            <span class="text-danger" v-if="errors.donation_amount">{{
+              errors.donation_amount
+            }}</span>
           </div>
           <div class="col-md-4" v-if="memberShipTypesName">
             <span>Total Fee</span>
@@ -231,6 +272,9 @@
               v-model="form.grand_total_amount"
               id="total"
             />
+            <span class="text-danger" v-if="errors.grand_total_amount">{{
+              errors.grand_total_amount
+            }}</span>
           </div>
           <div class="col-12 d-flex my-2">
             <button
@@ -257,14 +301,14 @@ export default {
     paymentypes: Array,
     membertypes: Array,
   },
-  data(props) {
+  data() {
     return {
       url: null,
       citizenship: "citizenship",
       permanentResident: "permanentResident",
       other: "other",
       memberShipTypesName: null,
-
+      coubleDivShow: false,
       membership_amount: null,
       donation_amount: null,
       grand_total_amount: null,
@@ -307,13 +351,20 @@ export default {
       if (this.$refs.photo) {
         this.form.image = this.$refs.photo.files[0];
       }
-      this.form.post(route("membershipStore"));
+      this.form.post(route("membershipStore"), {
+        onSuccess: () => this.form.reset(),
+      });
     },
     previewImage(e) {
       const file = e.target.files[0];
       this.url = URL.createObjectURL(file);
     },
     OnChangeMemberType(objs) {
+      if (objs.slug == "general-membershipt") {
+        this.coubleDivShow = true;
+      } else {
+        this.coubleDivShow = false;
+      }
       this.memberShipTypesName = objs.name;
       this.form.membership_amount = objs.price;
       this.form.grand_total_amount = this.form.membership_amount + objs.price;

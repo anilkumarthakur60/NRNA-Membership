@@ -18,8 +18,8 @@ class AdminMiddleware
     {
         if (!auth()->user()->userType) {
             return redirect(route('donor.dashboard'));
-        } else {
-            return redirect(route('dashboard'));
         }
+
+        return $next($request);
     }
 }

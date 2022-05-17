@@ -17,6 +17,7 @@ class FrontendController extends Controller
 {
     public function membershipIndex()
     {
+
         $membertypes = Membertype::all();
         $paymentypes = Paymenttype::all();
         return Inertia::render('Welcome', [
@@ -37,9 +38,9 @@ class FrontendController extends Controller
 
     public function membershipStore(Request $request)
     {
+
         $data =  $this->validate($request, [
             'name' => 'required',
-            'image' => 'image|mimes:png,jpg,jpeg',
             'email' => 'required|unique:users,email',
             'street_address' => 'required',
             'apartment' => 'required',
@@ -49,7 +50,6 @@ class FrontendController extends Controller
             'country' => 'required',
             'status' => 'required|in:citizenship,permanent_resident,other',
             'membertype_id' => 'required|exists:membertypes,id',
-            'paymenttype_id' => 'required|exists:paymenttypes,id',
             'phone' => 'required',
             'donation_amount' => 'gt:0',
 
@@ -57,10 +57,17 @@ class FrontendController extends Controller
 
 
 
-        $amount = 0;
 
-        $paymentypes = Paymenttype::findOrFail($request->paymenttype_id);
-        $amount = $amount + $paymentypes->price;
+        $amount = 0;
+        if ($request->paymenttype_id) {
+            $this->validate($request, [
+                'paymenttype_id' => 'required|exists:paymenttypes,id',
+            ]);
+            $paymentypes = Paymenttype::find($request->paymenttype_id);
+            $amount = $amount + $paymentypes->price;
+        }
+
+
         $membertypes = Membertype::findOrFail($request->membertype_id);
         $amount = $amount + $membertypes->price;
         if ($request->donation_amount > 0) {
@@ -97,7 +104,7 @@ class FrontendController extends Controller
                 0 => [
                     "amount" => [
                         "currency_code" => "USD",
-                        "value" => $amount
+                        "value" => 1
                     ]
                 ]
             ]
@@ -108,10 +115,10 @@ class FrontendController extends Controller
             // redirect to approve href
             foreach ($response['links'] as $links) {
                 if ($links['rel'] == 'approve') {
-                    return redirect()->away($links['href']);
+                    return  Inertia::location($links['href']);
+                    // return redirect()->away($links['href']);
                 }
             }
-            dd('something went wrong');
 
             return redirect()
                 ->route('front.index')

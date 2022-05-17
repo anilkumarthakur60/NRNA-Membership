@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CorMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,9 +19,16 @@ use Inertia\Inertia;
 |
 */
 
-Route::post('/', [FrontendController::class, 'membershipStore'])->name('membershipStore');
-Route::get('/', [FrontendController::class, 'membershipIndex'])->name('front.index');
-Route::get('membership-list', [FrontendController::class, 'memberlists'])->name('memberlists');
+
+
+
+Route::post('/', [FrontendController::class, 'membershipStore'])->name('membershipStore')->middleware(CorMiddleware::class);
+Route::get('/', [FrontendController::class, 'membershipIndex'])->name('front.index')->middleware(CorMiddleware::class);
+
+
+
+
+// Route::get('membership-list', [FrontendController::class, 'memberlists'])->name('memberlists');
 route::get('processSuccess', [FrontendController::class, 'processSuccess'])->name('processSuccess');
 route::get('processCancel', [FrontendController::class, 'processCancel'])->name('processCancel');
 route::get('membership-list', [FrontendController::class, 'membershipList'])->name('membershipList');
