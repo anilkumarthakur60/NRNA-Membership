@@ -19,11 +19,10 @@ class FrontendController extends Controller
     public function membershipIndex()
     {
 
-        $membertypes = Membertype::all();
-        $paymentypes = Paymenttype::all();
+        $membertypes = Membertype::withCount('paymenttype')->with('paymenttype')->get();
+
         return Inertia::render('Welcome', [
             'membertypes' => $membertypes,
-            'paymentypes' => $paymentypes,
         ]);
     }
 
@@ -58,7 +57,7 @@ class FrontendController extends Controller
 
 
 
-
+        dd($request->all());
 
 
         $amount = 0;
@@ -193,11 +192,7 @@ class FrontendController extends Controller
         }
     }
 
-    public function changeMemberStatusGet()
-    {
-        $users = User::withCount('membertype')->get();
-        return view('m');
-    }
+
 
     public function membershipList()
     {

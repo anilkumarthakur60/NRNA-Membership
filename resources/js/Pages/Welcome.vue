@@ -217,32 +217,30 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6" v-if="coubleDivShow">
-            <div
-              class="btn-group w-50"
-              v-for="(payments, index) in paymentypes"
-              :key="index"
-            >
-              <input
-                type="radio"
-                class="btn-check"
-                name="options-radios"
-                :value="payments.id"
-                @input="onChangePaymentType(payments)"
-                :id="payments.slug"
-                v-model="form.paymenttype_id"
-                autocomplete="off"
-              />
-              <label class="btn btn-outline-primary" :for="payments.slug">{{
-                payments.name + " amount" + payments.price
-              }}</label>
+          <div class="col-md-6">
+            <div v-if="paymentypes.id">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  :value="paymentypes.id"
+                  :id="paymentypes.slug"
+                  :true-value="paymentypes.id"
+                  :false-value="null"
+                  @change="onChangePaymentType(paymentypes)"
+                  v-model="form.paymenttype_id"
+                />
+                <label class="form-check-label" :for="paymentypes.slug">
+                  {{ paymentypes.name + " amount" + paymentypes.price }}
+                </label>
+              </div>
             </div>
             <span class="text-danger" v-if="errors.paymenttype_id">{{
               errors.paymenttype_id
             }}</span>
           </div>
 
-          <div class="col-md-4" v-if="memberShipTypesName">
+          <div class="col-md-3" v-if="memberShipTypesName">
             <span>{{ memberShipTypesName }}</span>
             <input
               type="number"
@@ -255,7 +253,8 @@
               errors.membership_amount
             }}</span>
           </div>
-          <div class="col-md-4" v-if="memberShipTypesName">
+
+          <div class="col-md-3" v-if="memberShipTypesName">
             <span>Make Donation"(Optional)</span>
             <input
               type="number"
@@ -268,7 +267,7 @@
               errors.donation_amount
             }}</span>
           </div>
-          <div class="col-md-4" v-if="memberShipTypesName">
+          <div class="col-md-3" v-if="memberShipTypesName">
             <span>Total Fee</span>
             <input
               type="number"
@@ -303,7 +302,6 @@ export default {
   remember: "form",
   props: {
     errors: Object,
-    paymentypes: Array,
     membertypes: Array,
   },
   components: {
@@ -322,6 +320,13 @@ export default {
       membership_amount: null,
       donation_amount: null,
       grand_total_amount: null,
+      checked: false,
+      paymentypes: {
+        id: null,
+        name: null,
+        slug: null,
+        price: null,
+      },
     };
   },
   setup() {
@@ -370,11 +375,16 @@ export default {
       this.url = URL.createObjectURL(file);
     },
     OnChangeMemberType(objs) {
-      if (objs.slug == "general-membershipt") {
-        this.coubleDivShow = true;
-      } else {
-        this.coubleDivShow = false;
-      }
+      //   if (objs.slug == "general-membershipt") {
+      //     this.coubleDivShow = true;
+      //   } else {
+      //     this.coubleDivShow = false;
+      //   }
+      this.paymentypes.id = objs.paymenttype.id;
+      this.paymentypes.name = objs.paymenttype.name;
+      this.paymentypes.slug = objs.paymenttype.slug;
+      this.paymentypes.price = objs.paymenttype.price;
+      console.log(this.paymentypes);
       this.memberShipTypesName = objs.name;
       this.form.membership_amount = objs.price;
       this.form.grand_total_amount = this.form.membership_amount + objs.price;

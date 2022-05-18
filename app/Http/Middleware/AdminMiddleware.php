@@ -16,7 +16,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->user()->userType) {
+        if (!auth()->user()->usertype) {
             return redirect(route('donor.dashboard'));
         }
 

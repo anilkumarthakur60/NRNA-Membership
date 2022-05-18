@@ -1,12 +1,14 @@
 <template>
   <member-layout>
-    <h1>Donor Dashboard</h1>
+    <h6>Donor Dashboard</h6>
     <div class="" v-if="user.referal_code">
       <div id="app" v-cloak>
         <div class="container">
-          <div class="row">
-            <div class="col-sm-12">
-              <div
+          <div class="row justify-content-center align-item-center">
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <!-- <div
                 class="
                   form-control
                   wizard-form-control
@@ -31,6 +33,34 @@
                   id="testing-code"
                   :value="route('joinInvitaionLink', user.referal_code)"
                 />
+              </div> -->
+
+                  <form @submit.prevent="store()">
+                    <div class="row">
+                      <div class="mb-3 col-12">
+                        <label for="" class="form-label">Invite Link to </label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          v-model="form.email"
+                          aria-describedby="helpId"
+                          placeholder=""
+                        />
+
+                        <span class="text-danger" v-if="errors.email">{{
+                          errors.email
+                        }}</span>
+                      </div>
+                      <div class="col-12 d-flex">
+                        <loading-button
+                          :Classes="'btn btn-success btn-sm px-4 text-white mx-auto'"
+                          :loading="form.processing"
+                          >Submit</loading-button
+                        >
+                      </div>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -45,13 +75,36 @@
 <script>
 import MemberLayout from "../../Layouts/MemberLayout.vue";
 
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link, useForm } from "@inertiajs/inertia-vue3";
+import LoadingButton from "../../Components/LoadingButton.vue";
 export default {
-  components: { MemberLayout, Link },
+  components: { MemberLayout, Link, LoadingButton },
   props: {
     user: Object,
+    errors: Object,
+  },
+
+  setup() {
+    const form = useForm({
+      email: null,
+    });
+    return { form };
   },
   methods: {
+    store() {
+      this.form.post(route("sendInivationLink"), {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.$swal({
+            icon: "success",
+            title: "User has been created Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          this.form.reset();
+        },
+      });
+    },
     copyTestingCode() {
       let testingCodeToCopy = document.querySelector("#testing-code");
       testingCodeToCopy.setAttribute("type", "text");

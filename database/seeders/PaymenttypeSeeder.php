@@ -17,8 +17,8 @@ class PaymenttypeSeeder extends Seeder
     {
 
         $data = [
-            ['name' => 'single', 'price' => 5],
-            ['name' => 'couple', 'price' => 10],
+            ['name' => 'couple', 'price' => 1, 'membertype_id' => 1],
+            ['name' => 'couple', 'price' => 2, 'membertype_id' => 2],
         ];
 
         foreach ($data as $payment) {

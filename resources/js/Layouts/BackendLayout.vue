@@ -1,5 +1,5 @@
 <template>
-  <div class="" v-if="$page.props.user.userType == true">
+  <div class="" v-if="$page.props.user.usertype == true">
     <div
       class="
         side-navbar

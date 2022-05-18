@@ -24,4 +24,9 @@ class Membertype extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function paymenttype()
+    {
+        return $this->hasOne(Paymenttype::class);
+    }
 }

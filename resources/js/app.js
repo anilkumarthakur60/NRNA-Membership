@@ -5,6 +5,7 @@ import { createInertiaApp, Link } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+window.$ = window.jQuery = require("jquery");
 
 
 const options = {

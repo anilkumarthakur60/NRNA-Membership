@@ -137,9 +137,9 @@ class UserController extends Controller
 
     public function changeUserStatus(User $user)
     {
-        $user->userType = !$user->userType;
+        $user->usertype = !$user->usertype;
         $user->save();
-        if ($user->userType) {
+        if ($user->usertype) {
             $status = 'Active';
         } else {
             $status = "Inactive";

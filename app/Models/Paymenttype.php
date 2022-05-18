@@ -12,9 +12,9 @@ class Paymenttype extends Model
     use HasFactory, Sluggable;
     protected $guarded = ['id'];
 
-    public function users()
+    public function membertype()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(Membertype::class);
     }
     public function sluggable(): array
     {

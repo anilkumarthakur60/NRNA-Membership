@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
 
-            $table->boolean('userType')->default(false);
+            $table->boolean('usertype')->default(false);
             $table->string('street_address')->nullable();
             $table->string('apartment')->nullable();
             $table->string('city')->nullable();
@@ -39,7 +39,7 @@ return new class extends Migration
             $table->foreignId('parent_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('referal_code')->nullable();
             $table->foreignIdFor(Membertype::class)->nullable()->constrained('membertypes')->nullOnDelete();
-            $table->foreignIdFor(Paymenttype::class)->nullable()->constrained('paymenttypes')->nullOnDelete();
+            $table->foreignIdFor(Paymenttype::class)->nullable()->constrained()->nullOnDelete();
 
             $table->timestamps();
         });

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendInvitationMail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
@@ -46,5 +48,16 @@ class DashboardController extends Controller
         return Inertia::render('Users/DonorDashboard', [
             'user' => auth()->user()
         ]);
+    }
+
+    public function sendInivationLink(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'email|unique:users,email'
+        ]);
+        $route = route('joinInvitaionLink', auth()->user()->referal_code);
+
+        Mail::to($request->email)->send(new SendInvitationMail($route));
+        return redirect(route('donor.dashboard'));
     }
 }

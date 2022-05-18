@@ -29,13 +29,14 @@ Route::get('/', [FrontendController::class, 'membershipIndex'])->name('front.ind
 
 
 
-// Route::get('membership-list', [FrontendController::class, 'memberlists'])->name('memberlists');
-route::get('processSuccess', [FrontendController::class, 'processSuccess'])->name('processSuccess');
-route::get('processCancel', [FrontendController::class, 'processCancel'])->name('processCancel');
-route::get('membership-list', [FrontendController::class, 'membershipList'])->name('membershipList');
+Route::get('processSuccess', [FrontendController::class, 'processSuccess'])->name('processSuccess');
+Route::get('processCancel', [FrontendController::class, 'processCancel'])->name('processCancel');
+Route::get('membership-list', [FrontendController::class, 'membershipList'])->name('membershipList');
 
-route::get('join-link/invitation-link={user:referal_code}', [FrontendController::class, 'joinInvitaionLink'])->name('joinInvitaionLink');
-route::post('join-by-link/{user:referal_code}', [FrontendController::class, 'joinInvitaionLinkPost'])->name('joinInvitaionLinkPost');
+Route::get('join-link/invitation-link={user:referal_code}', [FrontendController::class, 'joinInvitaionLink'])->name('joinInvitaionLink');
+Route::post('join-by-link/{user:referal_code}', [FrontendController::class, 'joinInvitaionLinkPost'])->name('joinInvitaionLinkPost');
+
+
 
 
 Route::middleware([
@@ -58,4 +59,5 @@ Route::middleware([
     Route::get('donor/dashboard', [DashboardController::class, 'donor'])->name('donor.dashboard');
     Route::get('users/change-user-status/{user}', [UserController::class, 'changeUserStatus'])->name('users.changeUserStatus');
     Route::resource('users', UserController::class);
+    Route::post('send-email-invitation-link', [DashboardController::class, 'sendInivationLink'])->name('sendInivationLink');
 });

@@ -28,7 +28,7 @@
               :width="60"
               :height="30"
               :speed="480"
-              :value="user.userType"
+              :value="user.usertype"
               :labels="{ checked: 'Active', unchecked: 'Inactive' }"
             />
             {{ hodor }}
