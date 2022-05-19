@@ -57,7 +57,6 @@ class FrontendController extends Controller
 
 
 
-        dd($request->all());
 
 
         $amount = 0;
@@ -223,5 +222,10 @@ class FrontendController extends Controller
                 'name' => 'Name',
             ]);
         });
+    }
+    public function getcouplePrice(Membertype $membertype)
+    {
+
+        return $membertype->paymenttype;
     }
 }

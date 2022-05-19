@@ -23,9 +23,9 @@ use Inertia\Inertia;
 
 
 
-Route::post('/', [FrontendController::class, 'membershipStore'])->name('membershipStore')->middleware(CorMiddleware::class);
-Route::get('/', [FrontendController::class, 'membershipIndex'])->name('front.index')->middleware(CorMiddleware::class);
-
+Route::post('/', [FrontendController::class, 'membershipStore'])->name('membershipStore');
+Route::get('/', [FrontendController::class, 'membershipIndex'])->name('front.index');
+Route::get('get-couple-price/{membertype}', [FrontendController::class, 'getcouplePrice'])->name('getcouplePrice');
 
 
 

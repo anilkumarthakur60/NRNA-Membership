@@ -26,7 +26,7 @@
           required
         />
         <label class="btn btn-outline-primary" :for="membertype.slug">{{
-          membertype.name + " amount:" + membertype.price
+          membertype.name
         }}</label>
 
         <span class="text-danger" v-if="errors.membertype_id">{{
@@ -218,20 +218,20 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div v-if="paymentypes.id">
+            <div v-if="payment_amount">
               <div class="form-check">
                 <input
                   class="form-check-input"
                   type="checkbox"
-                  :value="paymentypes.id"
-                  :id="paymentypes.slug"
-                  :true-value="paymentypes.id"
+                  :value="paymentypes_price"
+                  :id="paymentypes_slug"
+                  :true-value="paymentypes_id"
                   :false-value="null"
-                  @change="onChangePaymentType(paymentypes)"
-                  v-model="form.paymenttype_id"
+                  @input="onChangePaymentType(paymentypes_price)"
+                  v-model="paymentypes_price"
                 />
-                <label class="form-check-label" :for="paymentypes.slug">
-                  {{ paymentypes.name + " amount" + paymentypes.price }}
+                <label class="form-check-label" :for="paymentypes_slug">
+                  {{ paymentypes_name }}
                 </label>
               </div>
             </div>
@@ -252,6 +252,16 @@
             <span class="text-danger" v-if="errors.membership_amount">{{
               errors.membership_amount
             }}</span>
+          </div>
+          <div class="col-md-3" v-if="payment_amount_div">
+            <span>{{ paymentypes_name }}</span>
+            <input
+              type="number"
+              required
+              class="form-control"
+              :id="paymentypes_slug"
+              v-model="form.payment_amount"
+            />
           </div>
 
           <div class="col-md-3" v-if="memberShipTypesName">
@@ -321,12 +331,12 @@ export default {
       donation_amount: null,
       grand_total_amount: null,
       checked: false,
-      paymentypes: {
-        id: null,
-        name: null,
-        slug: null,
-        price: null,
-      },
+      payment_amount: false,
+      payment_amount_div: false,
+      paymentypes_id: null,
+      paymentypes_name: null,
+      paymentypes_price: null,
+      paymentypes_slug: null,
     };
   },
   setup() {
@@ -350,6 +360,7 @@ export default {
       membership_amount: null,
       donation_amount: null,
       grand_total_amount: null,
+      payment_amount: null,
     });
 
     return { form };
@@ -380,19 +391,44 @@ export default {
       //   } else {
       //     this.coubleDivShow = false;
       //   }
-      this.paymentypes.id = objs.paymenttype.id;
-      this.paymentypes.name = objs.paymenttype.name;
-      this.paymentypes.slug = objs.paymenttype.slug;
-      this.paymentypes.price = objs.paymenttype.price;
-      console.log(this.paymentypes);
-      this.memberShipTypesName = objs.name;
-      this.form.membership_amount = objs.price;
-      this.form.grand_total_amount = this.form.membership_amount + objs.price;
+      //   this.payment_amount = true;
+
+      this.paymentypes_id = objs.paymenttype.id;
+      this.paymentypes_name = objs.paymenttype.name;
+      this.paymentypes_slug = objs.paymenttype.slug;
+      this.paymentypes_price = objs.paymenttype.price;
+      this.form.membership_amount = objs.paymenttype.price;
+
+      //   this.memberShipTypesName = objs.name;
+      //   this.form.membership_amount = objs.price;
+      //   this.form.grand_total_amount = this.form.membership_amount + objs.price;
+
+      axios.get(route("getcouplePrice", objs.id)).then((response) => {
+        this.paymentypes_id = objs.paymenttype.id;
+        this.paymentypes_name = objs.paymenttype.name;
+        this.paymentypes_slug = objs.paymenttype.slug;
+        this.paymentypes_price = objs.paymenttype.price;
+        this.payment_amount = true;
+        this.memberShipTypesName = objs.name;
+      });
     },
 
-    onChangePaymentType(objs) {
-      this.form.grand_total_amount =
-        this.form.membership_amount + this.form.donation_amount + objs.price;
+    onChangePaymentType(paymentypes_price) {
+      this.payment_amount_div = true;
+      if (this.paymentypes_price) {
+        this.form.grand_total_amount =
+          this.form.membership_amount +
+          this.form.donation_amount +
+          this.paymentypes_price;
+        this.form.payment_amount = this.paymentypes_price;
+      } else {
+        this.payment_amount_div = false;
+        this.form.grand_total_amount =
+          this.form.membership_amount +
+          this.form.donation_amount +
+          paymentypes_price;
+        this.form.payment_amount = this.paymentypes_price;
+      }
     },
     domationAmountChange() {
       this.form.grand_total_amount =
