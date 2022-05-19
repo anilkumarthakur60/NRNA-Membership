@@ -410,6 +410,11 @@ export default {
         this.paymentypes_price = objs.paymenttype.price;
         this.payment_amount = true;
         this.memberShipTypesName = objs.name;
+        this.form.grand_total_amount =
+          this.form.membership_amount +
+          this.form.donation_amount +
+          this.paymentypes_price;
+        this.form.payment_amount = this.paymentypes_price;
       });
     },
 
