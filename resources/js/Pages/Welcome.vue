@@ -225,8 +225,8 @@
                   type="checkbox"
                   :value="paymentypes_price"
                   :id="paymentypes_slug"
-                  :true-value="paymentypes_id"
-                  :false-value="null"
+                  :false-value="paymentypes_id"
+                  :true-value="null"
                   @input="onChangePaymentType(paymentypes_price)"
                   v-model="paymentypes_price"
                 />
@@ -244,7 +244,7 @@
             <span>{{ memberShipTypesName }}</span>
             <input
               type="number"
-              required
+              readonly=""
               class="form-control"
               id="first"
               v-model="form.membership_amount"
@@ -257,7 +257,7 @@
             <span>{{ paymentypes_name }}</span>
             <input
               type="number"
-              required
+              readonly=""
               class="form-control"
               :id="paymentypes_slug"
               v-model="form.payment_amount"
@@ -270,6 +270,7 @@
               type="number"
               class="form-control"
               id="second"
+              min="0"
               @change="domationAmountChange()"
               v-model="form.donation_amount"
             />

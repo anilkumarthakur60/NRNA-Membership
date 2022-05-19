@@ -45,6 +45,7 @@ class FrontendController extends Controller
             'street_address' => 'required',
             'apartment' => 'required',
             'city' => 'required',
+
             'provience' => 'required',
             'zip_code' => 'required',
             'country' => 'required',
@@ -55,16 +56,16 @@ class FrontendController extends Controller
 
         ]);
 
-
+        // dd($request->all());
 
 
 
         $amount = 0;
-        if ($request->paymenttype_id) {
+        if ($request->payment_amount) {
             $this->validate($request, [
-                'paymenttype_id' => 'nullable|exists:paymenttypes,id',
+                'payment_amount' => 'nullable|exists:paymenttypes,id',
             ]);
-            $paymentypes = Paymenttype::find($request->paymenttype_id);
+            $paymentypes = Paymenttype::find($request->payment_amount);
             $amount = $amount + $paymentypes->price;
         }
 
@@ -85,8 +86,11 @@ class FrontendController extends Controller
 
             $image = $request->image->store('membership', 'public');
             $data['image'] = $image;
+        } else {
+            $data['image'] = null;
         }
 
+        // dd($amount);
 
 
         session()->put('membershipData', $data);
@@ -137,22 +141,52 @@ class FrontendController extends Controller
     public function processSuccess(Request $request)
     {
 
-        dd($request->all());
 
         $provider = new PayPalClient;
         $provider->setApiCredentials(config('paypal'));
         $provider->getAccessToken();
         $response = $provider->capturePaymentOrder($request['token']);
 
+
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
 
-            User::create(session()->get('membershipData'));
+            DB::transaction(function () use ($response) {
+
+                dd($response);
+
+                $UserPostData = session()->get('membershipData');
+
+
+                $user = User::create([
+                    'name' => $UserPostData['name'],
+                    'email' => $UserPostData['email'],
+                    'password' => bcrypt($UserPostData['email'] . $UserPostData['city']),
+
+                    'street_address' => $UserPostData['street_address'],
+                    'apartment' => $UserPostData['apartment'],
+                    'city' => $UserPostData['city'],
+                    'provience' => $UserPostData['provience'],
+                    'zip_code' => $UserPostData['zip_code'],
+                    'country' => $UserPostData['country'],
+                    'status' => $UserPostData['status'],
+                    'image' => $UserPostData['image'],
+                    'membertype_id' => $UserPostData['membertype_id'],
+                    'paymenttype_id' => $UserPostData['payment_amount'],
+                    'phone' => $UserPostData['phone'],
+                    'donation_amount' => $UserPostData['donation_amount'],
+
+                ]);
+
+
+                $amount = $response['purchase_units'][0]['payments']['captures'][0]['amount']['value'];
+                dd($amount);
+            });
             return redirect()
-                ->route('membership')
+                ->route('membershipList')
                 ->with('success', 'Transaction complete.');
         } else {
             return redirect()
-                ->route('membership')
+                ->route('front.index')
                 ->with('error', $response['message'] ?? 'Something went wrong.');
         }
     }
@@ -162,7 +196,7 @@ class FrontendController extends Controller
 
         dd($request->all());
         return redirect()
-            ->route('membership')
+            ->route('front.index')
             ->with('error', $response['message'] ?? 'You have canceled the transaction.');
     }
 

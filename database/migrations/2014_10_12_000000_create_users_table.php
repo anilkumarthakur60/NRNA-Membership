@@ -24,8 +24,8 @@ return new class extends Migration
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
-
             $table->boolean('usertype')->default(false);
+            
             $table->string('street_address')->nullable();
             $table->string('apartment')->nullable();
             $table->string('city')->nullable();
