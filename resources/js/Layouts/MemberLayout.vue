@@ -20,6 +20,12 @@
         </Link>
       </li>
       <li class="nav-link">
+        <Link :href="route('front.index')">
+          <i class="bx bx-conversation"></i>
+          <span class="mx-2">Home</span>
+        </Link>
+      </li>
+      <li class="nav-link">
         <Link :href="route('profile.show')">
           <i class="bx bx-user-check"></i>
           <span class="mx-2">Profile</span>

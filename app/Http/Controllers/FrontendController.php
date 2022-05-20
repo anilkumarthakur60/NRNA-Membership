@@ -66,8 +66,12 @@ class FrontendController extends Controller
             $this->validate($request, [
                 'payment_amount' => 'nullable|exists:paymenttypes,id',
             ]);
+
             $paymentypes = Paymenttype::find($request->payment_amount);
             $amount = $amount + $paymentypes->price;
+            $data['payment_amount'] = $request->payment_amount;
+        } else {
+            $data['payment_amount'] = null;
         }
 
 
@@ -153,9 +157,9 @@ class FrontendController extends Controller
 
             DB::transaction(function () use ($response) {
 
-                dd($response);
 
                 $UserPostData = session()->get('membershipData');
+
 
 
                 $user = User::create([
@@ -178,14 +182,32 @@ class FrontendController extends Controller
 
                 ]);
 
+                $data = [];
+                $data['user_id'] = $user->id;
+                $data['amount'] = $response['purchase_units'][0]['payments']['captures'][0]['amount']['value'];
+                $data['currency_code'] = $response['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'];
+                $data['payer_name'] = $response['purchase_units'][0]['shipping']['name']['full_name'];
+                $data['payer_email_address'] = $response['payer']['email_address'];
+                $data['address_line_1'] = $response['purchase_units'][0]['shipping']['address']['address_line_1'];
+                $data['admin_area_2'] = $response['purchase_units'][0]['shipping']['address']['admin_area_2'];
+                $data['admin_area_1'] = $response['purchase_units'][0]['shipping']['address']['admin_area_1'];
+                $data['postal_code'] = $response['purchase_units'][0]['shipping']['address']['postal_code'];
+                $data['country_code'] = $response['purchase_units'][0]['shipping']['address']['country_code'];
+                $data['payer_payer_id'] = $response['payer']['payer_id'];
+                $data['token'] = $response['id'];
+                $data['status'] = $response['status'];
 
-                $amount = $response['purchase_units'][0]['payments']['captures'][0]['amount']['value'];
-                dd($amount);
+                $user->paymentInfos()->create($data);
+                $usertype = UserType::where('slug', 'pending')->first();
+                $user->UserTypes()->attach($usertype->id);
+                toastr()->success('Transation completed');
             });
             return redirect()
                 ->route('membershipList')
                 ->with('success', 'Transaction complete.');
         } else {
+
+            toastr()->error('Some Thing Went Wrong');
             return redirect()
                 ->route('front.index')
                 ->with('error', $response['message'] ?? 'Something went wrong.');
@@ -195,7 +217,8 @@ class FrontendController extends Controller
     public function processCancel(Request $request)
     {
 
-        dd($request->all());
+
+        toastr()->warning('You have cancelled transation');
         return redirect()
             ->route('front.index')
             ->with('error', $response['message'] ?? 'You have canceled the transaction.');
@@ -211,6 +234,7 @@ class FrontendController extends Controller
 
     public function joinInvitaionLinkPost(Request $request)
     {
+
         dd($request->all());
     }
 
@@ -236,7 +260,7 @@ class FrontendController extends Controller
             });
         });
 
-        $users = QueryBuilder::for(User::class)
+        $users = QueryBuilder::for(User::class)->whereHas('UserTypes')
             ->defaultSort('name')
             ->allowedSorts(['name', 'email'])
             ->allowedFilters(['name', 'email', $globalSearch])

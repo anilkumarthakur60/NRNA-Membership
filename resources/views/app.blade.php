@@ -18,6 +18,8 @@
     @routes
     <script src="{{ mix('js/app.js') }}" defer></script>
     @inertiaHead
+    @toastr_css
+
 </head>
 
 <body class="font-sans antialiased">
@@ -27,7 +29,9 @@
     <script src="{{ mix('js/bundle.js') }}"></script>
     @endenv --}}
 
-
+    @jquery
+    @toastr_js
+    @toastr_render
 </body>
 
 </html>

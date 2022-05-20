@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\UserType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -78,6 +79,11 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+
+        $user->load(['paymentInfos', 'paymenttype', 'membertype']);
+        return Inertia::render('Users/Show', [
+            'user' => $user
+        ]);
         //
     }
 
@@ -145,5 +151,36 @@ class UserController extends Controller
             $status = "Inactive";
         }
         return response()->json(['success' => 'User type updated to ' . $status]);
+    }
+
+
+    public function donorList()
+    {
+
+
+        $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
+            $query->where(function ($query) use ($value) {
+                $query->where('name', 'LIKE', "%{$value}%")->orWhere('email', 'LIKE', "%{$value}%");
+            });
+        });
+
+        $users = QueryBuilder::for(User::class)->whereHas('paymentInfos')->with('paymentInfos')
+            ->defaultSort('name')
+            ->allowedSorts(['name', 'email'])
+            ->allowedFilters(['name', 'email', $globalSearch])
+            ->paginate(10)
+            ->withQueryString();
+
+        return Inertia::render('Users/DonorList', [
+            'users' => $users,
+        ])->table(function (InertiaTable $table) {
+            $table->addSearchRows([
+                'name' => 'Name',
+                'email' => 'Email address',
+            ])->addColumns([
+                'email' => 'Email address',
+                'name' => 'Name',
+            ]);
+        });
     }
 }

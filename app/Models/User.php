@@ -73,6 +73,16 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+
+    public function membertype()
+    {
+        return $this->belongsTo(Membertype::class);
+    }
+    public function paymenttype()
+    {
+        return $this->belongsTo(Paymenttype::class);
+    }
+
     public function children()
     {
         return $this->hasOne(User::class, 'parent_id');
@@ -86,5 +96,12 @@ class User extends Authenticatable
     public function paymentInfos()
     {
         return $this->hasMany(PaymentInfo::class);
+    }
+
+    public function scopePaymentInfoTotalAmount($query)
+    {
+        return $query->whereHas('paymentInfos', function ($voteQuery) {
+            $voteQuery->sum('amount');
+        });
     }
 }

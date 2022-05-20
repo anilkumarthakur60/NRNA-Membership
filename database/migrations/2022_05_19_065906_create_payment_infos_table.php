@@ -17,14 +17,18 @@ return new class extends Migration
         Schema::create('payment_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->restrictOnDelete();
-            $table->string('Ids')->nullable();
-            
-            $table->string('status')->nullable();
-            $table->string('PayerID')->nullable();
-            $table->string('token')->nullable();
-
-
             $table->string('amount')->nullable();
+            $table->string('currency_code')->nullable();
+            $table->string('payer_name')->nullable();
+            $table->string('payer_email_address')->nullable();
+            $table->string('address_line_1')->nullable();
+            $table->string('admin_area_2')->nullable();
+            $table->string('admin_area_1')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('country_code')->nullable();
+            $table->string('payer_payer_id')->nullable();
+            $table->string('token')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

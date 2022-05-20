@@ -198,6 +198,8 @@ return [
         App\Providers\JetstreamServiceProvider::class,
 
         Srmklive\PayPal\Providers\PayPalServiceProvider::class,
+        Yoeunes\Toastr\ToastrServiceProvider::class
+
 
     ],
 

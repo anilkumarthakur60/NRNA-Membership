@@ -3,11 +3,36 @@
 <template>
   <Head title="Welcome" />
   <div class="container mt-2">
+    <!-- <div class="" v-if="$page.props.user">
+      <Link
+        v-if="$page.props.user.usertype == 1"
+        :href="route('dashboard')"
+        class="btn btn-sm btn-success my-2 px-4 fw-bold text-white"
+      >
+        Dashboard
+      </Link>
+      <Link
+        v-else
+        :href="route('dashboard')"
+        class="btn btn-sm btn-success my-2 px-4 fw-bold text-white"
+      >
+        Dashboard
+      </Link>
+    </div>
+    <div class="" v-else>
+      <Link
+        :href="route('login')"
+        class="btn btn-sm btn-success my-2 px-4 fw-bold text-white"
+      >
+        Login
+      </Link>
+    </div> -->
     <Link
       :href="route('login')"
       class="btn btn-sm btn-success my-2 px-4 fw-bold text-white"
-      >Login</Link
     >
+      Login
+    </Link>
     <form @submit.prevent="store" method="post">
       <div
         class="btn-group w-50"

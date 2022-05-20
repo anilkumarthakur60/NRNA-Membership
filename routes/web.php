@@ -46,6 +46,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('users/change-user-status/{user}', [UserController::class, 'changeUserStatus'])->name('users.changeUserStatus');
+    Route::get('users/donor-list', [UserController::class, 'donorList'])->name('users.donorList');
     Route::resource('users', UserController::class);
     Route::resource('userTypes', UserTypeController::class);
 });

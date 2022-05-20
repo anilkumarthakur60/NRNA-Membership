@@ -25,16 +25,17 @@ return new class extends Migration
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->boolean('usertype')->default(false);
-            
+
             $table->string('street_address')->nullable();
             $table->string('apartment')->nullable();
             $table->string('city')->nullable();
             $table->string('provience')->nullable();
+
             $table->string('zip_code')->nullable();
             $table->string('country')->nullable();
             $table->string('status')->nullable();
             $table->string('total')->nullable();
-            $table->string('image')->nullable();
+            
             $table->string('phone')->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('referal_code')->nullable();
