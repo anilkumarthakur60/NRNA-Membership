@@ -1,3 +1,5 @@
 {
-    "/js/ssr.js": "/js/ssr.js"
+    "/js/app.js": "/js/app.js?id=17f07b14768f25fcd7ade0bae2d5f174",
+    "/css/app.css": "/css/app.css?id=85e564740f036afb444c63cf27f1068b",
+    "/bootstrap/app.css": "/bootstrap/app.css?id=c1475ca66aef5104189d064b14e3751f"
 }
