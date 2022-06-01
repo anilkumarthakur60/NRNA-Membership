@@ -30252,7 +30252,7 @@ __webpack_require__.r(__webpack_exports__);
     expose();
     var props = __props;
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.useForm)({
-      _method: "PUT",
+      _method: 'PUT',
       name: props.user.name,
       email: props.user.email,
       photo: null
@@ -30266,8 +30266,8 @@ __webpack_require__.r(__webpack_exports__);
         form.photo = photoInput.value.files[0];
       }
 
-      form.post(route("user-profile-information.update"), {
-        errorBag: "updateProfileInformation",
+      form.post(route('user-profile-information.update'), {
+        errorBag: 'updateProfileInformation',
         preserveScroll: true,
         onSuccess: function onSuccess() {
           return clearPhotoFileInput();
@@ -30296,7 +30296,7 @@ __webpack_require__.r(__webpack_exports__);
     };
 
     var deletePhoto = function deletePhoto() {
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia["delete"](route("current-user-photo.destroy"), {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia["delete"](route('current-user-photo.destroy'), {
         preserveScroll: true,
         onSuccess: function onSuccess() {
           photoPreview.value = null;
