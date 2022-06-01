@@ -40,7 +40,15 @@ class User extends Authenticatable
         'parent_id',
         'referal_code',
         'paymenttype_id',
-        'membertype_id'
+        'membertype_id',
+        'gender',
+        'profession',
+        'dob',
+        'highest_degree',
+        'area_of_expertise',
+        'year_of_experience',
+        'image',
+        'skills'
     ];
 
     /**

@@ -32,6 +32,12 @@
         </Link>
       </li>
       <li class="nav-link">
+        <Link :href="route('donor.invite')">
+          <i class="bx bx-user-check"></i>
+          <span class="mx-2">Invite</span>
+        </Link>
+      </li>
+      <li class="nav-link">
         <Link :href="route('logout')" method="post">
           <i class="bx bx-user-check"></i>
           <span class="mx-2">Logout</span>
@@ -42,12 +48,11 @@
 
   <!-- Main Wrapper -->
   <div class="p-1 my-container active-cont">
-    <!-- Top Nav -->
-    <nav class="navbar top-navbar navbar-light bg-light px-5">
+    <!-- <nav class="navbar top-navbar navbar-light bg-light px-5">
       <button class="btn border-0" id="menu-btn">
         <i class="bx bx-menu"></i>
       </button>
-    </nav>
+    </nav> -->
 
     <slot></slot>
   </div>
@@ -111,8 +116,5 @@ body {
   margin-left: -62px;
 }
 
-.my-container input {
-  border-radius: 2rem;
-  padding: 2px 20px;
-}
+
 </style>

@@ -17,12 +17,13 @@ mix.js('resources/js/app.js', 'public/js').vue()
     .postCss('resources/css/app.css', 'public/css', [
         require('postcss-import'),
         require('tailwindcss'),
+        require('autoprefixer'),
     ])
     .alias({
         '@': 'resources/js',
     })
     .sass('resources/sass/app.scss', 'public/bootstrap')
-    .browserSync()
+    .browserSync('127.0.0.1:8000');
 
 if (mix.inProduction()) {
     mix.version();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Mail\SendInvitationMail;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,12 +12,16 @@ use Inertia\Inertia;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
 
     public function index()
     {
+
+
+        $authusers=auth()->user();
         $globalSearch = AllowedFilter::callback('global', function ($query, $value) {
             $query->where(function ($query) use ($value) {
                 $query->where('name', 'LIKE', "%{$value}%")->orWhere('email', 'LIKE', "%{$value}%");
@@ -32,6 +37,7 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard', [
             'users' => $users,
+            'authusers'=>$authusers
         ])->table(function (InertiaTable $table) {
             $table->addSearchRows([
                 'name' => 'Name',
@@ -45,8 +51,11 @@ class DashboardController extends Controller
 
     public function donor()
     {
+
+$user=  new UserResource(auth()->user());
         return Inertia::render('Users/DonorDashboard', [
-            'user' => auth()->user()
+            'user' => $user,
+            'membership'=>auth()->user()->membertype
         ]);
     }
 
@@ -59,5 +68,47 @@ class DashboardController extends Controller
 
         Mail::to($request->email)->send(new SendInvitationMail($route));
         return redirect(route('donor.dashboard'));
+    }
+    public function invite()
+    {
+
+        return Inertia::render('Users/Invite');
+    }
+    public function updateProfile(Request $request){
+
+auth()->user()->update([
+    'gender'=>$request->gender,
+    'profession'=>$request->profession,
+    'street_address'=>$request->street_address,
+    'dob'=>date('Y-m-d',(int)$request->dob)
+]);
+        return redirect()->route('donor.dashboard');
+
+    }
+
+    public function updateDocument(Request $request){
+        $this->validate($request, [
+            'image' => 'required|image|mimes:png,jpg,jpeg'
+        ]);
+
+        if(Storage::exists(auth()->user()->image)) {
+            Storage::delete(auth()->user()->image);
+        }
+
+        auth()->user()->update([
+            'image'=>$request->image->store('user','public'),
+        ]);
+
+        return redirect()->route('donor.dashboard');
+
+
+    }
+
+    public function updateSkills(Request $request){
+
+
+        auth()->user()->update($request->all());
+        return redirect()->route('donor.dashboard');
+
     }
 }

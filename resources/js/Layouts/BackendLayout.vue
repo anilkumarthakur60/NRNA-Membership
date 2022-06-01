@@ -132,8 +132,5 @@ body {
   margin-left: -62px;
 }
 
-.my-container input {
-  border-radius: 2rem;
-  padding: 2px 20px;
-}
+
 </style>

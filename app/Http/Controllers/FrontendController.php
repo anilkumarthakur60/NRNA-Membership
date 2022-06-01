@@ -285,6 +285,7 @@ class FrontendController extends Controller
     public function getcouplePrice(Membertype $membertype)
     {
 
+
         return $membertype->paymenttype;
     }
 }

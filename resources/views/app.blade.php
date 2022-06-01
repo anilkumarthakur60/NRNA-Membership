@@ -25,9 +25,10 @@
 <body class="font-sans antialiased">
     @inertia
 
-    {{-- @env('local')
-    <script src="{{ mix('js/bundle.js') }}"></script>
-    @endenv --}}
+    @env('local')
+    <script src="http://localhost:8000/js/bundle.js"></script>
+
+    @endenv
 
     @jquery
     @toastr_js

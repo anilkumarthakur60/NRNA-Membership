@@ -51,14 +51,18 @@ Route::middleware([
     Route::resource('userTypes', UserTypeController::class);
 });
 
-Route::middleware([
+Route::prefix('donor')->middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
     route::get('generate-link', [FrontendController::class, 'GenerateLink'])->name('generateLink');
-    Route::get('donor/dashboard', [DashboardController::class, 'donor'])->name('donor.dashboard');
+    Route::get('dashboard', [DashboardController::class, 'donor'])->name('donor.dashboard');
+    Route::get('invite', [DashboardController::class, 'invite'])->name('donor.invite');
     Route::get('users/change-user-status/{user}', [UserController::class, 'changeUserStatus'])->name('users.changeUserStatus');
     Route::resource('users', UserController::class);
     Route::post('send-email-invitation-link', [DashboardController::class, 'sendInivationLink'])->name('sendInivationLink');
+    Route::put('profile-update', [DashboardController::class, 'updateProfile'])->name('updateProfile');
+    Route::put('profile-document-upload', [DashboardController::class, 'updateDocument'])->name('updateDocument');
+    Route::put('update-skills', [DashboardController::class, 'updateSkills'])->name('updateSkills');
 });
