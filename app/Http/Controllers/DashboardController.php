@@ -87,17 +87,47 @@ auth()->user()->update([
     }
 
     public function updateDocument(Request $request){
-        $this->validate($request, [
-            'image' => 'required|image|mimes:png,jpg,jpeg'
-        ]);
 
-        if(Storage::exists(auth()->user()->image)) {
-            Storage::delete(auth()->user()->image);
+
+
+        if($request->hasFile('image')){
+            $this->validate($request, [
+                'image' => 'image|mimes:png,jpg,jpeg',
+            ]);
+
+            if(auth()->user()->image!=null){
+
+                if(Storage::disk('public')->exists(auth()->user()->image)) {
+                    Storage::disk('public')->delete(auth()->user()->image);
+                }
+            }
+                $image=$request->image->store('user','public');
+                auth()->user()->update([
+                    'image'=>$image,
+
+                ]);
         }
 
-        auth()->user()->update([
-            'image'=>$request->image->store('user','public'),
-        ]);
+        if($request->hasFile('profile_photo_path')){
+            $this->validate($request, [
+                'profile_photo_path'=>'image|mimes:png,jpg,jpeg'
+            ]);
+            if(auth()->user()->profile_photo_path!=null){
+                if(Storage::disk('public')->exists(auth()->user()->profile_photo_path)) {
+                    Storage::disk('public')->delete(auth()->user()->profile_photo_path);
+                }
+            }
+            $profile=$request->profile_photo_path->store('user','public');
+            auth()->user()->update([
+                'profile_photo_path'=>$profile,
+
+            ]);
+
+        }
+
+
+
+
 
         return redirect()->route('donor.dashboard');
 
@@ -105,7 +135,6 @@ auth()->user()->update([
     }
 
     public function updateSkills(Request $request){
-
 
         auth()->user()->update($request->all());
         return redirect()->route('donor.dashboard');

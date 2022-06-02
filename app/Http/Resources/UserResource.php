@@ -29,12 +29,14 @@ class UserResource extends JsonResource
             'gender' => $this->gender,
             'profession' => $this->profession,
             'dob' => $this->dob?date('jS F Y',(int)$this->dob):null,
+            'dobs' => date('Y-m-d',(int)$this->dob),
             'highest_degree' => $this->highest_degree,
             'area_of_expertise' => $this->area_of_expertise,
             'year_of_experience' => $this->year_of_experience,
             'referal_code' => $this->referal_code,
             'created_at'=>date('Y-m-d , H:m', strtotime($this->created_at)),
             'image'=>$this->image?asset('/storage/'.$this->image):null,
+            'profile_photo_path'=>$this->profile_photo_path?asset('/storage/'.$this->profile_photo_path):null,
             'skills'=>$this->skills
         ];
     }

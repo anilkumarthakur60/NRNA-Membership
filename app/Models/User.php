@@ -48,7 +48,8 @@ class User extends Authenticatable
         'area_of_expertise',
         'year_of_experience',
         'image',
-        'skills'
+        'skills',
+        'profile_photo_path'
     ];
 
     /**
