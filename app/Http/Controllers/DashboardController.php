@@ -97,6 +97,7 @@ auth()->user()->update([
 
             if(auth()->user()->image!=null){
 
+
                 if(Storage::disk('public')->exists(auth()->user()->image)) {
                     Storage::disk('public')->delete(auth()->user()->image);
                 }
