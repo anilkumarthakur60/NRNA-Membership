@@ -6,6 +6,6 @@
     You have invitation link please join
 
 
-    Thanks,<br>
+    Thanks,
     {{ config('app.name') }}
 @endcomponent

@@ -680,8 +680,14 @@ export default {
     const form = useForm({
       gender: props.user.data.gender,
       profession: props.user.data.profession,
-      dob: props.user.data.dobs,
+      dob: null,
       street_address: props.user.data.street_address,
+
+      highest_degree: props.user.data.highest_degree,
+      area_of_expertise: props.user.data.area_of_expertise,
+      year_of_experience: props.user.data.year_of_experience,
+      skills: props.user.data.skills,
+      
     });
     const forms = useForm({
       image: null,
@@ -707,7 +713,6 @@ export default {
             showConfirmButton: false,
             timer: 1500,
           });
-          this.form.reset();
         },
          onError: (errors) => {
                console.log('documentError',errors)
@@ -730,7 +735,6 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-            this.forms.reset();
           },
            onError: (errors) => {
                console.log('documentError',errors)
@@ -748,7 +752,6 @@ export default {
             showConfirmButton: false,
             timer: 1500,
           });
-          this.formSkills.reset();
         },
          onError: (errors) => {
                console.log('documentError',errors)

@@ -14,11 +14,15 @@ use Inertia\Inertia;
 use ProtoneMedia\LaravelQueryBuilderInertiaJs\InertiaTable;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendPasswordMail;
+
 
 class FrontendController extends Controller
 {
     public function membershipIndex()
     {
+
 
         $membertypes = Membertype::withCount('paymenttype')->with('paymenttype')->get();
 
@@ -234,8 +238,30 @@ class FrontendController extends Controller
 
     public function joinInvitaionLinkPost(Request $request)
     {
+        $password=Str::random(40);
 
-        dd($request->all());
+        User::firstOrCreate(
+            ['email' =>  request('email')],
+            [
+                'name' => request('name'),
+                'street_address' => request('street_address'),
+                'apartment' => request('apartment'),
+                'city' => request('city'),
+                'provience' => request('provience'),
+                'zip_code' => request('zip_code'),
+                'country' => request('country'),
+                'status' => request('status'),
+                'phone' => request('phone'),
+                'password' => bcrypt($password),
+            ]
+        );
+        Mail::to($request->email)->send(new SendPasswordMail($password));
+       $user= User::where('referal_code',$request->referal_code)->first();
+        $user->referal_code=null;
+        $user->save();
+        return redirect()->route('front.index');
+
+
     }
 
     public function GenerateLink()

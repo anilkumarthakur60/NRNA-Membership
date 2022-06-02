@@ -76,12 +76,21 @@ $user=  new UserResource(auth()->user());
     }
     public function updateProfile(Request $request){
 
-auth()->user()->update([
-    'gender'=>$request->gender,
-    'profession'=>$request->profession,
-    'street_address'=>$request->street_address,
-    'dob'=>date('Y-m-d',(int)$request->dob)
-]);
+        $data=[
+            'gender'=>$request->gender,
+            'profession'=>$request->profession,
+            'street_address'=>$request->street_address,
+            'dob'=>date('Y-m-d',(int)$request->dob)
+        ];
+
+
+        $user=auth()->user();
+        $user->gender=$request->gender;
+        $user->profession=$request->profession;
+        $user->street_address=$request->street_address;
+        $user->dob=date('Y-m-d',(int)$request->dob);
+        $user->save();
+
         return redirect()->route('donor.dashboard');
 
     }
@@ -139,6 +148,7 @@ auth()->user()->update([
 
         auth()->user()->update($request->all());
         return redirect()->route('donor.dashboard');
+        
 
     }
 }

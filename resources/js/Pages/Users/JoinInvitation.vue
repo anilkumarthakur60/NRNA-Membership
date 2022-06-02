@@ -136,29 +136,7 @@
               >
             </div>
           </div>
-          <div class="col-md-6 my-2">
-            <div class="mb-3 row">
-              <label
-                for="staticEmail"
-                class="col-sm-4 col-form-label text-right"
-                >Image</label
-              >
-              <div class="col-sm-8">
-                <input
-                  type="file"
-                  class="form-control"
-                  @change="previewImage"
-                  id="staticEmail"
-                  @input="form.image = $event.target.files[0]"
-                />
-                <img v-if="url" :src="url" class="w-25 my-2" />
-              </div>
-            </div>
 
-            <span v-if="form.errors.name" class="text-danger">{{
-              form.errors.name
-            }}</span>
-          </div>
 
           <div class="col-12 d-flex my-2">
             <button
@@ -197,7 +175,7 @@ export default {
       grand_total_amount: null,
     };
   },
-  setup() {
+  setup(props) {
     const form = useForm({
       name: null,
       image: null,
@@ -210,7 +188,7 @@ export default {
       country: null,
       status: null,
       image: null,
-      referal_code: null,
+      referal_code: props.user.referal_code,
       membertype_id: null,
       paymenttype_id: null,
       phone: null,
@@ -234,7 +212,24 @@ export default {
       if (this.$refs.photo) {
         this.form.image = this.$refs.photo.files[0];
       }
-      this.form.post(route("joinInvitaionLinkPost", user.referal_code));
+      this.form.post(route("joinInvitaionLinkPost", user.referal_code),{
+        preserveScroll: true,
+        onSuccess: () => {
+          this.$swal({
+            icon: "success",
+            title: "Profile created successfuly and password has been mailed",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          this.form.reset();
+        },
+         onError: (errors) => {
+               console.log('documentError',errors)
+           },
+      });
+
+
+
     },
     previewImage(e) {
       const file = e.target.files[0];
