@@ -8,10 +8,8 @@
               <div class="user-heading round">
                 <a href="#">
                   <img
-                    :src="'/storage/' + user.profile_photo_path"
-                    alt=""
-                    data-pagespeed-url-hash="2453698638"
-                    onload="pagespeed.CriticalImages.checkImageForCriticality(this);"
+                    :src="user.data.profile_photo_path"
+
                   />
                 </a>
                 <h1>{{ user.name }}</h1>
@@ -521,15 +519,7 @@
 
                                 <div class="row">
                                   <div class="col-md-6" v-if="user.data.image">
-                                    <input
-                                      type="file"
-                                      class="
-                                        position-absolute
-                                        h-100
-                                        w-100
-                                        opacity-0
-                                      "
-                                    />
+
                                     <img
                                       :src="user.data.image"
                                       class="img-fluid"
@@ -546,16 +536,17 @@
                                       text-theme
                                     "
                                   >
-                                    Upload Photo
+                                    Upload Documents
                                   </h5>
                                   <form @submit.prevent="storeDocument">
                                     <div class="row">
                                       <div class="col-md-6">
+                                        <p class="fw-bold text-center">
+                                          Upload Your Document
+                                        </p>
                                         <input
                                           type="file"
-                                          @input="
-                                            forms.image = $event.target.files[0]
-                                          "
+                                          @input="forms.image = $event.target.files[0]"
                                         />
                                         <progress
                                           v-if="forms.progress"
@@ -564,22 +555,33 @@
                                         >
                                           {{ forms.progress.percentage }}%
                                         </progress>
+                                      </div>
+                                      <div class="col-md-6">
                                         <p class="fw-bold text-center">
                                           Upload Your Photo
                                         </p>
-                                      </div>
-                                      <div class="col-12 d-flex mt-3">
-                                        <button
-                                          type="submit"
-                                          class="btn btn-sm btn-success mx-auto"
+                                        <input
+                                          type="file"
+                                          @input="forms.profile_photo_path = $event.target.files[0]"
+                                        />
+                                        <progress
+                                          v-if="forms.progress"
+                                          :value="forms.progress.percentage"
+                                          max="100"
                                         >
-                                          Submit
-                                        </button>
+                                          {{ forms.progress.percentage }}%
+                                        </progress>
+                                      </div>
+                                      <div class="col-sm-12 d-flex mt-3">
+                                        <loading-button
+                                          :Classes="'btn btn-success btn-sm px-4 text-white mx-auto'"
+                                          :loading="form.processing"
+                                          >Submit</loading-button
+                                        >
                                       </div>
                                     </div>
                                   </form>
                                 </div>
-
                               </div>
 
                               <div
@@ -588,13 +590,14 @@
                                 role="tabpanel"
                                 aria-labelledby="profile_tab_3-tab"
                               >
-                                <form  @submit.prevent="storeSkills">
+                                <form @submit.prevent="storeSkills">
                                   <div class="row">
                                     <div class="col-md-6 form-group mt-3">
                                       <label class="text-dark fw-bold"
                                         >Highest Degree</label
                                       ><input
-                                        type="text" v-model="formSkills.highest_degree"
+                                        type="text"
+                                        v-model="formSkills.highest_degree"
                                         class="form-control"
                                         required=""
                                       />
@@ -603,7 +606,8 @@
                                       <label class="text-dark fw-bold"
                                         >Area of Expertise</label
                                       ><input
-                                        type="text" v-model="formSkills.area_of_expertise"
+                                        type="text"
+                                        v-model="formSkills.area_of_expertise"
                                         class="form-control"
                                         required=""
                                       />
@@ -612,7 +616,8 @@
                                       <label class="text-dark fw-bold"
                                         >Years of Experience</label
                                       ><input
-                                        type="text" v-model="formSkills.year_of_experience"
+                                        type="text"
+                                        v-model="formSkills.year_of_experience"
                                         class="form-control"
                                         required=""
                                       />
@@ -621,12 +626,13 @@
                                       <label class="text-dark fw-bold"
                                         >Skills</label
                                       ><input
-                                        type="text" v-model="formSkills.skills"
+                                        type="text"
+                                        v-model="formSkills.skills"
                                         class="form-control"
                                         required=""
                                       />
                                     </div>
-                                     <div class="col-sm-12 d-flex mt-3">
+                                    <div class="col-sm-12 d-flex mt-3">
                                       <loading-button
                                         :Classes="'btn btn-success btn-sm px-4 text-white mx-auto'"
                                         :loading="form.processing"
@@ -634,7 +640,6 @@
                                       >
                                     </div>
                                   </div>
-
                                 </form>
                               </div>
                             </div>
@@ -667,16 +672,20 @@ export default {
     membership: Object,
     errors: Object,
   },
+   mounted() {
+    console.log('usersdata',this.user.data);
+  },
 
   setup(props) {
     const form = useForm({
       gender: props.user.data.gender,
       profession: props.user.data.profession,
-      dob: null,
+      dob: props.user.data.dobs,
       street_address: props.user.data.street_address,
     });
     const forms = useForm({
       image: null,
+      profile_photo_path: null,
     });
     const formSkills = useForm({
       highest_degree: props.user.data.highest_degree,
@@ -700,6 +709,9 @@ export default {
           });
           this.form.reset();
         },
+         onError: (errors) => {
+               console.log('documentError',errors)
+           },
       });
     },
 
@@ -707,6 +719,7 @@ export default {
       this.forms.post(
         route("updateDocument", {
           _method: "put",
+            forceFormData: true,
         }),
         {
           preserveScroll: true,
@@ -719,6 +732,9 @@ export default {
             });
             this.forms.reset();
           },
+           onError: (errors) => {
+               console.log('documentError',errors)
+           },
         }
       );
     },
@@ -734,6 +750,9 @@ export default {
           });
           this.formSkills.reset();
         },
+         onError: (errors) => {
+               console.log('documentError',errors)
+           },
       });
     },
     //
